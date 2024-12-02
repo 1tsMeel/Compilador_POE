@@ -1896,26 +1896,26 @@ class SymbolTable:
 
 class Interpreter:
   def visit(self, node, context):
-    method_name = f'visit_{tipo(node).__name__}'
+    method_name = f'visit_{type(node).__name__}'
     method = getattr(self, method_name, self.no_visit_method)
     return method(node, context)
 
   def no_visit_method(self, node, context):
-    raise Exception(f'No visit_{tipo(node).__name__} method defined')
+    raise Exception(f'No visit_{type(node).__name__} method defined')
 
   ###################################
 
-  def visit_NumberNode(self, node, context):
+  def visit_NodoNumero(self, node, context):
     return RTResult().success(
       Number(node.tok.valor).set_context(context).set_pos(node.pos_comienzo, node.pos_fin)
     )
 
-  def visit_StringNode(self, node, context):
+  def visit_NodoCadena(self, node, context):
     return RTResult().success(
       String(node.tok.valor).set_context(context).set_pos(node.pos_comienzo, node.pos_fin)
     )
 
-  def visit_ListNode(self, node, context):
+  def visit_NodoLista(self, node, context):
     res = RTResult()
     elements = []
 
@@ -1927,7 +1927,7 @@ class Interpreter:
       List(elements).set_context(context).set_pos(node.pos_comienzo, node.pos_fin)
     )
 
-  def visit_VarAccessNode(self, node, context):
+  def visit_NodoVariableAcceso(self, node, context):
     res = RTResult()
     var_name = node.var_name_tok.valor
     valor = context.symbol_table.get(var_name)
